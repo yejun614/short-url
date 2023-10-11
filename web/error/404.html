@@ -1,0 +1,17 @@
+<main>
+    <h1>{{.Err404Title}}</h1>
+    <h2>{{.Err404Description}}</h2>
+
+    <div class="input-group">
+        <label>{{.Err404ExtraDescrpition}}</label>
+    </div>
+    <button id="home-btn" class="btn">{{.HomeButton}}</button>
+</main>
+
+<script>
+    const homeBtn = document.getElementById("home-btn");
+
+    homeBtn.addEventListener("click", () => {
+        location.href = "/";
+    });
+</script>

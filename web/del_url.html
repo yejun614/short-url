@@ -1,0 +1,62 @@
+<main>
+    <h1>{{.DelUrlTitle}}</h1>
+    <h2>{{.DelUrlDescription}}</h2>
+
+    <div id="error-box"></div>
+
+    <div id="url-input-box" class="input-group">
+        <label>{{.UrlLinkPlaceholder}} <a id="url-link" href="#" target="_blank">{{.UrlLink}}</a></label>
+        <input type="text" id="url-link-input" class="input-box" placeholder="{{.UrlLinkPlaceholder}}" disabled>
+
+        <label>{{.DelKeyInputPlaceHolder}}</label>
+        <input type="text" id="key-input" class="input-box" placeholder="{{.DelKeyInputPlaceHolder}}">
+
+        <label>{{.AdminPwInputPlaceHolder}}</label>
+        <input type="password" id="admin-pw-input" class="input-box" placeholder="{{.AdminPwInputPlaceHolder}}">
+    </div>
+    <button id="del-btn" class="btn danger">{{.UrlDelButton}}</button>
+    <button id="home-btn" class="btn">{{.HomeButton}}</button>
+</main>
+
+<script>
+    const keyInput = document.getElementById("key-input");
+    const adminPwInput = document.getElementById("admin-pw-input");
+    const urlLink = document.getElementById("url-link");
+    const urlLinkInput = document.getElementById("url-link-input");
+    const delBtn = document.getElementById("del-btn");
+    const homeBtn = document.getElementById("home-btn");
+    const errorBox = document.getElementById("error-box");
+    const searchParams = new URLSearchParams(location.href.split("?")[1]);
+
+    if (searchParams.has("key")) {
+        keyInput.value = searchParams.get("key");
+        urlLink.href = `${location.origin}/${keyInput.value}`;
+        urlLinkInput.value = urlLink.href;
+    }
+
+    delBtn.addEventListener("click", () => {
+        if (keyInput.value == "" || adminPwInput.value == "") {
+            alert("{{.InputBlinkError}}");
+            return;
+        }
+
+        axios.delete(`/${keyInput.value}`, {
+            data: {
+                "admin_pw": adminPwInput.value,
+            },
+        })
+        .then((response) => {
+            alert("{{.UrlDelSuccess}}");
+            location.href = "/web";
+        })
+        .catch((error) => {
+            alert("{{.ApiErrorAlert}}");
+            errorBox.innerHTML = error.message + "<br>" + error.response.data.error;
+            console.log(error);
+        });
+    });
+
+    homeBtn.addEventListener("click", () => {
+        location.href = "/";
+    });
+</script>

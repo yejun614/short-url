@@ -1,0 +1,25 @@
+<main>
+    <h1>{{.SiteName}}</h1>
+    <h2>{{.SiteDescription}}</h2>
+
+    <div id="url-input-box" class="input-group">
+        <input type="text" id="url-input" class="input-box" placeholder="{{.UrlInputPlaceHolder}}">
+    </div>
+    <button id="url-btn" class="btn">{{.UrlButton}}</button>
+</main>
+
+<script>
+    const urlInput = document.getElementById("url-input");
+    const urlBtn = document.getElementById("url-btn");
+
+    urlInput.focus();
+
+    urlBtn.addEventListener("click", () => {
+        if (urlInput.value == "") {
+            alert("{{.InputBlinkError}}");
+            return;
+        }
+
+        location.href = "/web/add?url=" + encodeURIComponent(urlInput.value);
+    })
+</script>

@@ -1,0 +1,52 @@
+<main>
+    <h1>{{.AddUrlTitle}}</h1>
+    <h2>{{.AddUrlDescription}}</h2>
+
+    <div id="error-box"></div>
+
+    <div id="url-input-box" class="input-group">
+        <label>{{.UrlInputPlaceHolder}}</label>
+        <input type="text" id="url-input" class="input-box" placeholder="{{.UrlInputPlaceHolder}}">
+
+        <label>{{.KeyInputPlaceHolder}}</label>
+        <input type="text" id="key-input" class="input-box" placeholder="{{.KeyInputPlaceHolder}}">
+
+        <label>{{.AdminPwInputPlaceHolder}}</label>
+        <input type="password" id="admin-pw-input" class="input-box" placeholder="{{.AdminPwInputPlaceHolder}}">
+    </div>
+
+    <button id="url-btn" class="btn">{{.AddUrlButton}}</button>
+</main>
+
+<script>
+    const urlInput = document.getElementById("url-input");
+    const keyInput = document.getElementById("key-input");
+    const adminPwInput = document.getElementById("admin-pw-input");
+    const urlBtn = document.getElementById("url-btn");
+    const errorBox = document.getElementById("error-box");
+    const searchParams = new URLSearchParams(location.href.split("?")[1]);
+
+    if (searchParams.has("url")) {
+        urlInput.value = searchParams.get("url");
+    }
+
+    urlBtn.addEventListener("click", () => {
+        if (urlInput.value == "" || keyInput.value == "" || adminPwInput.value == "") {
+            alert("{{.InputBlinkError}}");
+            return;
+        }
+
+        axios.post(`/${keyInput.value}`, {
+            "url": urlInput.value,
+            "admin_pw": adminPwInput.value,
+        })
+        .then((response) => {
+            location.href = "/web/del?key=" + encodeURIComponent(keyInput.value);
+        })
+        .catch((error) => {
+            alert("{{.ApiErrorAlert}}");
+            errorBox.innerHTML = error.message + "<br>" + error.response.data.error;
+            console.log(error);
+        });
+    })
+</script>
