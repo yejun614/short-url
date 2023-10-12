@@ -253,7 +253,7 @@ func main() {
 	var addr string
 	addr, err = RedisClient.Get(ctx, "conf:addr").Result()
 	if err == redis.Nil {
-		addr = "localhost:8000"
+		addr = "0.0.0.0:8000"
 		if err := RedisClient.Set(ctx, "conf:addr", addr, 0).Err(); err != nil {
 			panic(err)
 		}
