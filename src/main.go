@@ -27,6 +27,7 @@ type UrlData struct {
 var (
 	err         error
 	FlagRedis   string
+	FlagReload  bool
 	RedisClient *redis.Client
 )
 
@@ -36,6 +37,12 @@ func parseFlag() {
 		"redis",
 		"redis://localhost:6379",
 		"Redis connection string (redis://<user>:<pass>@localhost:6379/<db>)",
+	)
+	flag.BoolVar(
+		&FlagReload,
+		"reload",
+		false,
+		"Reload the web templates on each render (for development)",
 	)
 	flag.Parse()
 }
@@ -197,6 +204,7 @@ func main() {
 
 	// fiber template engine
 	engine := html.New("./web", ".html")
+	engine.Reload(FlagReload)
 
 	// fiber
 	app := fiber.New(fiber.Config{
