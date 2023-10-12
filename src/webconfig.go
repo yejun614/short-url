@@ -26,3 +26,16 @@ var WebConfig = fiber.Map{
 	"Err404Description":       "이 페이지는 존재하지 않습니다.",
 	"Err404ExtraDescrpition":  "URL이 삭제되었거나 이동되었을 수 있습니다.",
 }
+
+func ExtraWebConfig(extra fiber.Map) fiber.Map {
+	newMap := map[string]interface{}{}
+
+	for k, v := range WebConfig {
+		newMap[k] = v
+	}
+	for k, v := range extra {
+		newMap[k] = v
+	}
+
+	return newMap
+}
